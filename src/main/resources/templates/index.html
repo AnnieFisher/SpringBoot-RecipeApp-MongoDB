@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Recipe Home</title>
+
+    <!--bootstrap css cdn-->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"
+          th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+
+    <!--boostrap js cdn-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"
+            th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+</head>
+<body>
+    <div class="container-fluid" style="margin-top: 20px">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <div class="card bg-light">
+                    <div class="card-header">
+                        <h1 class="card-title text-center bg-dark text-white">My Recipes!</h1>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" th:each="recipe : ${recipes}">
+                            <div class="col-sm-7 list-group-flush">
+                                <a href="" th:href="@{'/recipe/' + ${recipe.id} +'/show/'}" class="list-group-item list-group-item-action" th:text="${recipe.description}"></a>
+                            </div>
+                            <div class="col-sm-4">
+                                <div style="margin: 5px 0 5px 0">
+                                    <a href="" th:href="@{'/recipe/'+ ${recipe.id} +'/update'}" class="btn btn-outline-secondary btn-sm">Update</a>
+                                    <a href="" th:href="@{'/recipe/'+ ${recipe.id} +'/delete'}" class="btn btn-outline-danger btn-sm">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                         <a type="button" href="" th:href="@{'/recipe/new'}" class="btn btn-outline-secondary" style="width: 100%;">Add Recipe</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

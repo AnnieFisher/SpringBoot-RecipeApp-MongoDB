@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Recipe Details</title>
+
+    <!--bootstrap css cdn-->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"
+          th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+
+    <!--boostrap js cdn-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"
+            th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+<body>
+
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
+        <h1 class="mx-auto" th:text="${recipe.description}">Recipe Title</h1>
+        <a class="btn btn-outline-secondary btn-sm mr-2" href="" th:href="@{'/recipe/'+ ${recipe.id} +'/update'}">Update</a>
+        <a class="btn btn-outline-secondary btn-sm" href="" th:href="@{'/'}">All Recipes</a>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-6 mx-auto mb-3" >
+            <img th:if="${recipe.image == null}" src="../../static/images/recipe.jpeg"  th:src="@{/images/recipe.jpeg}"width="500" height="300">
+
+            <img th:unless="${recipe.image == null}" src="" th:src="@{'/recipe/' + ${recipe.id} + '/recipeImage'}" width="500" height="300">
+
+        </div>
+        <div class="col-md-1">
+            <a class="btn btn-default" href="#"
+               th:href="@{'/recipe/' + ${recipe.id} + '/image'}" role="button">Change Image</a>
+        </div>
+    </div>
+
+    <div class = "row">
+        <div class="col-sm-4">
+            <div>
+                <ul class="list-group-flush " style="padding-left:0;">
+                    <li class="list-group-item list-group-item-action bg-secondary text-white">Categories</li>
+                    <ul class="list-inline list-group-item-light text-dark" th:each="cat : ${recipe.categoryList}" style="margin: 5px;">
+                        <li class="list-inline-item" th:remove="all">Category 1</li>
+                        <li class="list-inline-item" th:remove="all">Category 2</li>
+                        <li class="list-inline-item" th:text="${cat}"></li>
+                    </ul>
+                    <li class="list-group-item list-group-item-action bg-secondary text-white">Prep Time</li>
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-light text-dark" th:text="${recipe.prepTime}+' minutes'">"prep time"</li>
+                    </ul>
+                    <li class="list-group-item list-group-item-action bg-secondary text-white">Cook Time</li>
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-light text-dark" th:text="${recipe.cookTime}+' minutes'">"cook time"</li>
+                    </ul>
+                    <li class="list-group-item list-group-item-action bg-secondary text-white">Source</li>
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-light text-dark" th:text="${recipe.source}">"source"</li>
+                    </ul>
+                    <li class="list-group-item list-group-item-action bg-secondary text-white">Difficulty</li>
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-light text-dark" th:text="${recipe.difficulty}">"difficulty"</li>
+                    </ul>
+                    <li class="list-group-item list-group-item-action bg-secondary text-white">Servings</li>
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-light text-dark" th:text="${recipe.servings}">"servings"</li>
+                    </ul>
+                    <li class="list-group-item list-group-item-action bg-secondary text-white">URL</li>
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-light text-dark" th:text="${recipe.url}">"url"</li>
+                    </ul>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="card bg-light row">
+                <div class="card-header">
+                    <h1 class="card-title text-center bg-dark text-white">Ingredients</h1>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group-flush" th:each="ingredient : ${recipe.ingredients}">
+                        <li class="list-group-item" th:remove="all">ingredient 1</li>
+                        <li class="list-group-item" th:remove="all">ingredient 2</li>
+                        <li class="list-group-item" th:remove="all">ingredient 3</li>
+                        <li class="list-group-item" th:remove="all">ingredients 4</li>
+                        <li class="list-group-item" th:text="${#numbers.formatDecimal(ingredient.amount,0,2)}
+                                +' ' +${ingredient.uom.description}+' '  +${ingredient.description}"></li>
+                    </ul>
+                    <a class="btn btn-secondary" href="" th:href="@{'/recipe/'+${recipe.id} +'/ingredients'}" style="width: 100%;">View/Edit Ingredients</a>
+                </div>
+            </div>
+
+            <div class="card bg-light row" style="margin-top: 10px">
+                <div class="card-header">
+                    <h1 class="card-title text-center bg-dark text-white">Directions</h1>
+                </div>
+                <div class="card-body">
+                    <p th:utext="${#strings.replace( #strings.escapeXml(recipe.directions),T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')}">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Phasellus ultrices orci nec elit congue, a feugiat nisl gravida.
+                        Nullam vulputate metus non sollicitudin porttitor.
+                        In maximus nibh sed metus dictum, nec porta risus varius.
+                        Fusce in mi lobortis, efficitur dui nec, porttitor ex.
+                        Cras tempor ligula ac justo hendrerit, at mollis libero bibendum.
+                        Sed eu lorem sed lectus sollicitudin accumsan id et nisi.
+                        Vestibulum faucibus sapien eu pulvinar pellentesque.
+                        Fusce placerat mauris et eros rhoncus, quis fringilla velit rhoncus.
+                        Curabitur nec purus faucibus, rhoncus odio id, efficitur nulla.
+                        Suspendisse fermentum augue et tellus hendrerit, ac iaculis lacus cursus.
+                        Nunc sed magna in sem sollicitudin pretium.
+                        Quisque scelerisque sem sit amet auctor aliquam.
+                        Duis non turpis eget dolor pulvinar vehicula sed et est.
+                    </p>
+                </div>
+            </div>
+            <div class="card bg-light row" style="margin-top: 10px">
+                <div class="card-header">
+                    <h1 class="card-title text-center bg-dark text-white">Notes</h1>
+                </div>
+                <div class="card-body">
+                    <p th:utext="${#strings.replace( #strings.escapeXml(recipe.notes.recipeNotes),T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')}">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ipsum elit,
+                        porttitor non nulla vel, efficitur rhoncus nunc. Quisque quis sem interdum,
+                        tincidunt dui sit amet, tristique arcu. Aenean vitae sagittis ex, et ultrices
+                        dolor. Duis vitae eleifend eros. Curabitur aliquet ex sed turpis ullamcorper
+                        egestas. Pellentesque vulputate arcu vel nibh pulvinar placerat. Quisque eu
+                        elementum sapien. In blandit id turpis eget vehicula. Cras sodales, mi ut
+                        tincidunt suscipit, est ex faucibus quam, vitae blandit tortor nisi sed
+                        tellus. Proin ac tellus et sapien scelerisque pretium.</p>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+</body>
+</html>
