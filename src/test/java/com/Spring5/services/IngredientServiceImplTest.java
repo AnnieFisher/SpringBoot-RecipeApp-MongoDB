@@ -38,7 +38,6 @@ public class IngredientServiceImplTest {
 
     IngredientService ingredientService;
 
-    //init converters
     public IngredientServiceImplTest() {
         this.ingredientToIngredientCommand = new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand());
         this.ingredientCommandToIngredient = new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure());
@@ -53,8 +52,7 @@ public class IngredientServiceImplTest {
     }
 
     @Test
-    public void findByRecipeIdAndReceipeIdHappyPath() throws Exception {
-        //given
+    public void findByRecipeIdAndIngredientIdHappyPath() throws Exception {
         Recipe recipe = new Recipe();
         recipe.setId("1");
 
@@ -74,18 +72,15 @@ public class IngredientServiceImplTest {
 
         when(recipeReactiveRepository.findById(anyString())).thenReturn(Mono.just(recipe));
 
-        //then
         IngredientCommand ingredientCommand = ingredientService.findByRecipeIdAndIngredientId("1", "3").block();
 
-        //when
         assertEquals("3", ingredientCommand.getId());
         verify(recipeReactiveRepository, times(1)).findById(anyString());
     }
 
 
     @Test
-    public void testSaveRecipeCommand() throws Exception {
-        //given
+    public void testSaveIngredientCommand() throws Exception {
         IngredientCommand command = new IngredientCommand();
         command.setId("3");
         command.setRecipeId("2");
@@ -99,10 +94,8 @@ public class IngredientServiceImplTest {
         when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
         when(recipeReactiveRepository.save(any())).thenReturn(Mono.just(savedRecipe));
 
-        //when
         IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command).block();
 
-        //then
         assertEquals("3", savedCommand.getId());
         verify(recipeRepository, times(1)).findById(anyString());
         verify(recipeReactiveRepository, times(1)).save(any(Recipe.class));
@@ -111,7 +104,6 @@ public class IngredientServiceImplTest {
 
     @Test
     public void testDeleteById() throws Exception {
-        //given
         Recipe recipe = new Recipe();
         Ingredient ingredient = new Ingredient();
         ingredient.setId("3");
@@ -120,10 +112,8 @@ public class IngredientServiceImplTest {
 
         when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
 
-        //when
         ingredientService.deleteById("1", "3");
 
-        //then
         verify(recipeRepository, times(1)).findById(anyString());
         verify(recipeRepository, times(1)).save(any(Recipe.class));
     }

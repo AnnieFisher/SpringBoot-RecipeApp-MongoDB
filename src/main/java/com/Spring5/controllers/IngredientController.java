@@ -75,6 +75,5 @@ public class IngredientController {
         ingredientService.deleteById(recipeId, ingredientId).block();
         return "redirect:/recipe/" + recipeId + "/ingredients" ;
     }
-
 }
 

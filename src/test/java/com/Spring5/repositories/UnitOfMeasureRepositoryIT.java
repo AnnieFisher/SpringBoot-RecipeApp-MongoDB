@@ -25,18 +25,15 @@ public class UnitOfMeasureRepositoryIT {
 
     @Before
     public void setUp() throws Exception {
-
         recipeRepository.deleteAll();
         unitOfMeasureRepository.deleteAll();
 
         RecipeBootstrapMongo recipeBootstrap = new RecipeBootstrapMongo(recipeRepository, unitOfMeasureRepository);
-
         recipeBootstrap.onApplicationEvent(null);
     }
 
     @Test
     public void findByDescription() {
-
         Optional<UnitOfMeasure> uomOptional = unitOfMeasureRepository.findByDescription("Teaspoon");
 
         assertEquals("Teaspoon", uomOptional.get().getDescription());
@@ -44,7 +41,6 @@ public class UnitOfMeasureRepositoryIT {
 
     @Test
     public void findByDescriptionCup() {
-
         Optional<UnitOfMeasure> uomOptional = unitOfMeasureRepository.findByDescription("Cup");
 
         assertEquals("Cup", uomOptional.get().getDescription());

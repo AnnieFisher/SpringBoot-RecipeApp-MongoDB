@@ -32,15 +32,12 @@ public class NotesCommandToNotesTest {
 
     @Test
     public void convert() throws Exception {
-        //given
         NotesCommand notesCommand = new NotesCommand();
         notesCommand.setId(ID_VALUE);
         notesCommand.setRecipeNotes(RECIPE_NOTES);
 
-        //when
         Notes notes = converter.convert(notesCommand);
 
-        //then
         assertNotNull(notes);
         assertEquals(ID_VALUE, notes.getId());
         assertEquals(RECIPE_NOTES, notes.getRecipeNotes());

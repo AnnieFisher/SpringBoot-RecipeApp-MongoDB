@@ -33,7 +33,6 @@ public class RecipeBootstrapMongo implements ApplicationListener<ContextRefreshe
     public void onApplicationEvent(ContextRefreshedEvent event) {
         loadUom();
         recipeRepository.saveAll(getRecipes());
-        log.debug("Loading Bootstrap Data");
     }
 
     private void loadUom(){
@@ -73,7 +72,6 @@ public class RecipeBootstrapMongo implements ApplicationListener<ContextRefreshe
     private List<Recipe> getRecipes() {
         List<Recipe> recipes = new ArrayList<>();
 
-        //unit of measure
         Optional<UnitOfMeasure> tspUomOptional = unitOfMeasureRepository.findByDescription("Teaspoon");
         if (!tspUomOptional.isPresent()) {
             throw new RuntimeException("UOM Not Found-Teaspoon");
@@ -103,7 +101,6 @@ public class RecipeBootstrapMongo implements ApplicationListener<ContextRefreshe
             throw new RuntimeException("UOM Not Found-Ounce");
         }
 
-        // get uom
         UnitOfMeasure tspUom = tspUomOptional.get();
         UnitOfMeasure tbspUom = tbspUomOptional.get();
         UnitOfMeasure cupUom = cupUomOptional.get();
@@ -111,9 +108,6 @@ public class RecipeBootstrapMongo implements ApplicationListener<ContextRefreshe
         UnitOfMeasure eachUom = eachUomOptional.get();
         UnitOfMeasure pintUom = pintUomOptional.get();
         UnitOfMeasure ounceUom = ounceUomOptional.get();
-
-
-        //first recipe -- Guacamole
 
         Recipe guac = new Recipe();
         guac.setDescription("Perfect Guacamole");
@@ -171,8 +165,6 @@ public class RecipeBootstrapMongo implements ApplicationListener<ContextRefreshe
 
         recipes.add(guac);
 
-
-        //second recipe -- chicken tacos
         Recipe chknTacos = new Recipe();
         chknTacos.setDescription("Spicy Grilled Chicken Tacos!");
         chknTacos.setPrepTime(20);

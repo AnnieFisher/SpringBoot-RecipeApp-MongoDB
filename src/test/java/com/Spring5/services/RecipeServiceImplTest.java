@@ -62,8 +62,6 @@ public class RecipeServiceImplTest {
         when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
 
         Recipe recipeReturned = recipeService.findById("1");
-
-        //should go boom
     }
 
     @Test
@@ -88,7 +86,6 @@ public class RecipeServiceImplTest {
 
     @Test
     public void getRecipesTest() throws Exception {
-
         Recipe recipe = new Recipe();
         HashSet receipesData = new HashSet();
         receipesData.add(recipe);
@@ -104,16 +101,10 @@ public class RecipeServiceImplTest {
 
     @Test
     public void testDeleteById() throws Exception {
-
-        //given
         String idToDelete = "2";
 
-        //when
         recipeService.deleteById(idToDelete);
 
-        //no 'when', since method has void return type
-
-        //then
         verify(recipeRepository, times(1)).deleteById(anyString());
     }
 }

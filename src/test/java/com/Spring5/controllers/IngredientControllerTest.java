@@ -85,7 +85,6 @@ public class IngredientControllerTest {
                 .andExpect(model().attributeExists("uomList"));
 
         verify(recipeService, times(1)).findCommandById(anyString());
-
     }
 
     @Test
@@ -117,7 +116,6 @@ public class IngredientControllerTest {
         )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/2/ingredients"));
-
     }
 
     @Test
@@ -131,6 +129,5 @@ public class IngredientControllerTest {
                 .andExpect(view().name("redirect:/recipe/2/ingredients"));
 
         verify(ingredientService, times(1)).deleteById(anyString(), anyString());
-
     }
 }

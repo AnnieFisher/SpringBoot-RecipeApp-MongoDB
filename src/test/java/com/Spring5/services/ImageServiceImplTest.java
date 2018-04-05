@@ -31,7 +31,6 @@ public class ImageServiceImplTest {
 
     @Test
     public void saveImageFile() throws Exception {
-        //given
         String id = "1";
         MultipartFile multipartFile = new MockMultipartFile("imagefile", "testing.txt", "text/plain",
                 "Spring Framework Guru".getBytes());
@@ -44,10 +43,8 @@ public class ImageServiceImplTest {
 
         ArgumentCaptor<Recipe> argumentCaptor = ArgumentCaptor.forClass(Recipe.class);
 
-        //when
         imageService.saveImageFile(id, multipartFile);
 
-        //then
         verify(recipeRepository, times(1)).save(argumentCaptor.capture());
         Recipe savedRecipe = argumentCaptor.getValue();
         assertEquals(multipartFile.getBytes().length, savedRecipe.getImage().length);

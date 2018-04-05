@@ -28,8 +28,8 @@ public class RecipeCommandToRecipeTest {
     public static final Integer SERVINGS = Integer.valueOf("3");
     public static final String SOURCE = "Source";
     public static final String URL = "Some URL";
-    public static final String INGRED_ID_1 = "3";
-    public static final String INGRED_ID_2 = "4";
+    public static final String INGREDIENT_ID_1 = "3";
+    public static final String INGREDIENT_ID_2 = "4";
     public static final String NOTES_ID = "9";
 
     RecipeCommandToRecipe converter;
@@ -45,10 +45,8 @@ public class RecipeCommandToRecipeTest {
         assertNull(converter.convert(null));
     }
 
-
     @Test
     public void convert() throws Exception {
-        //given
         RecipeCommand recipeCommand = new RecipeCommand();
         recipeCommand.setId(RECIPE_ID);
         recipeCommand.setCookTime(COOK_TIME);
@@ -68,23 +66,24 @@ public class RecipeCommandToRecipeTest {
         List<String> catList = new ArrayList<>();
         List<String> enumNames = Stream.of(Categories.values()).map(Categories::name)
                 .collect(Collectors.toList());
+
         String cat1 = valueOf(Categories.AMERICAN);
         String cat2 = valueOf(Categories.CHINESE);
+
         catList.add(cat1);
         catList.add(cat2);
 
         recipeCommand.setCategoryList(catList);
 
         IngredientCommand ingredient = new IngredientCommand();
-        ingredient.setId(INGRED_ID_1);
+        ingredient.setId(INGREDIENT_ID_1);
 
         IngredientCommand ingredient2 = new IngredientCommand();
-        ingredient2.setId(INGRED_ID_2);
+        ingredient2.setId(INGREDIENT_ID_2);
 
         recipeCommand.getIngredients().add(ingredient);
         recipeCommand.getIngredients().add(ingredient2);
 
-        //when
         Recipe recipe  = converter.convert(recipeCommand);
 
         assertNotNull(recipe);
