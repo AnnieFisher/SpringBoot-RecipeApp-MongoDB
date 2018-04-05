@@ -110,22 +110,21 @@ public class IngredientServiceImpl implements IngredientService{
 
     @Override
     public Mono<Void> deleteById(String recipeId, String idToDelete){
+        Recipe recipe = recipeRepository.findById(recipeId).get();
 
-        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
-
-        if(recipeOptional.isPresent()){
-            Recipe recipe = recipeOptional.get();
-
-            Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
+        if(recipe != null){
+            Optional<Ingredient> ingredientOptional = recipe
+                    .getIngredients()
+                    .stream()
                     .filter(ingredient -> ingredient.getId().equals(idToDelete))
                     .findFirst();
 
             if(ingredientOptional.isPresent()){
                 recipe.getIngredients().remove(ingredientOptional.get());
-                recipeReactiveRepository.save(recipe);
+                recipeRepository.save(recipe);
             }
         } else {
-            log.debug("Recipe ID Not Found: " +recipeId);
+            log.debug("Recipe Id Not found. Id:" + recipeId);
         }
         return Mono.empty();
     }
