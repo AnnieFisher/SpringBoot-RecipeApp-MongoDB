@@ -31,7 +31,7 @@ public class UnitOfMeasureReactiveRepositoryTest {
 
         unitOfMeasureReactiveRepository.save(uom).block();
         String count = unitOfMeasureReactiveRepository.count().block().toString();
-        
+
         assertEquals("1", count);
     }
 
