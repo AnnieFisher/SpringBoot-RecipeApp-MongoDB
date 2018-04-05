@@ -8,8 +8,8 @@ import com.Spring5.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import com.Spring5.model.Ingredient;
 import com.Spring5.model.Recipe;
 import com.Spring5.repositories.RecipeRepository;
-import com.Spring5.repositories.UnitOfMeasureRepository;
 import com.Spring5.repositories.reactive.RecipeReactiveRepository;
+import com.Spring5.repositories.reactive.UnitOfMeasureReactiveRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -34,7 +34,7 @@ public class IngredientServiceImplTest {
     RecipeRepository recipeRepository;
 
     @Mock
-    UnitOfMeasureRepository unitOfMeasureRepository;
+    UnitOfMeasureReactiveRepository unitOfMeasureRepository;
 
     IngredientService ingredientService;
 

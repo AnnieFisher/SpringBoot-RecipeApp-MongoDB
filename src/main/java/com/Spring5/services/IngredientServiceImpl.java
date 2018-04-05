@@ -6,8 +6,8 @@ import com.Spring5.converters.IngredientToIngredientCommand;
 import com.Spring5.model.Ingredient;
 import com.Spring5.model.Recipe;
 import com.Spring5.repositories.RecipeRepository;
-import com.Spring5.repositories.UnitOfMeasureRepository;
 import com.Spring5.repositories.reactive.RecipeReactiveRepository;
+import com.Spring5.repositories.reactive.UnitOfMeasureReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,13 +25,13 @@ public class IngredientServiceImpl implements IngredientService{
     private final IngredientCommandToIngredient ingredientCommandToIngredient;
     private final RecipeRepository recipeRepository;
     private final RecipeReactiveRepository recipeReactiveRepository;
-    private final UnitOfMeasureRepository unitOfMeasureRepository;
+    private final UnitOfMeasureReactiveRepository unitOfMeasureRepository;
 
 
     public IngredientServiceImpl(IngredientToIngredientCommand ingredientToIngredientCommand,
                                  IngredientCommandToIngredient ingredientCommandToIngredient,
                                  RecipeRepository recipeRepository, RecipeReactiveRepository recipeReactiveRepository,
-                                 UnitOfMeasureRepository unitOfMeasureRepository) {
+                                 UnitOfMeasureReactiveRepository unitOfMeasureRepository) {
         this.ingredientToIngredientCommand = ingredientToIngredientCommand;
         this.ingredientCommandToIngredient = ingredientCommandToIngredient;
         this.recipeRepository = recipeRepository;
@@ -41,12 +41,13 @@ public class IngredientServiceImpl implements IngredientService{
 
     @Override
     public Mono<IngredientCommand> findByRecipeIdAndIngredientId(String recipeId, String ingredientId) {
-        return recipeReactiveRepository.findById(recipeId)
-                .map(recipe -> recipe.getIngredients().stream()
-                        .filter(ingredient -> ingredient.getId().equalsIgnoreCase(ingredientId))
-                        .findFirst())
-                .filter(Optional::isPresent).map(ingredient -> {
-                    IngredientCommand command = ingredientToIngredientCommand.convert(ingredient.get());
+        return recipeReactiveRepository
+                .findById(recipeId)
+                .flatMapIterable(Recipe::getIngredients)
+                .filter(ingredient -> ingredient.getId().equalsIgnoreCase(ingredientId))
+                .single()
+                .map(ingredient -> {
+                    IngredientCommand command = ingredientToIngredientCommand.convert(ingredient);
                     command.setRecipeId(recipeId);
                     return command;
                 });
@@ -76,8 +77,8 @@ public class IngredientServiceImpl implements IngredientService{
                 ingredientFound.setDescription(command.getDescription());
                 ingredientFound.setAmount(command.getAmount());
                 ingredientFound.setUom(unitOfMeasureRepository
-                        .findById(command.getUom().getId())
-                        .orElseThrow(() -> new RuntimeException("UOM NOT FOUND")));
+                        .findById(command.getUom().getId()).block());
+
             } else {
                 Ingredient ingredient = ingredientCommandToIngredient.convert(command);
                 ingredient.setId(UUID.randomUUID().toString());
