@@ -48,7 +48,7 @@ public class IngredientControllerTest {
     @Test
     public void testListIngredients() throws Exception {
         RecipeCommand recipeCommand = new RecipeCommand();
-        when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
+        when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(recipeCommand));
 
         mockMvc.perform(get("/recipe/1/ingredients"))
                 .andExpect(status().isOk())
@@ -75,14 +75,15 @@ public class IngredientControllerTest {
         RecipeCommand recipeCommand = new RecipeCommand();
         recipeCommand.setId("1");
 
-        when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
+        when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(recipeCommand));
         when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
 
         mockMvc.perform(get("/recipe/1/ingredient/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/ingredient/ingredientForm"))
                 .andExpect(model().attributeExists("ingredient"))
-                .andExpect(model().attributeExists("uomList"));
+                .andExpect(model().attributeExists("uomList"))
+                .andExpect(model().attributeExists("recipe"));
 
         verify(recipeService, times(1)).findCommandById(anyString());
     }
@@ -90,15 +91,18 @@ public class IngredientControllerTest {
     @Test
     public void testUpdateIngredientForm() throws Exception {
         IngredientCommand ingredientCommand = new IngredientCommand();
+        RecipeCommand recipe = new RecipeCommand();
 
         when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(Mono.just(ingredientCommand));
         when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
+        when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(recipe));
 
         mockMvc.perform(get("/recipe/1/ingredient/2/update"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/ingredient/ingredientForm"))
                 .andExpect(model().attributeExists("ingredient"))
-                .andExpect(model().attributeExists("uomList"));
+                .andExpect(model().attributeExists("uomList"))
+                .andExpect(model().attributeExists("recipe"));
     }
 
     @Test
