@@ -7,7 +7,6 @@ import com.Spring5.model.Recipe;
 import com.Spring5.repositories.reactive.RecipeReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -34,13 +33,11 @@ public class RecipeServiceImpl implements RecipeService{
     }
 
     @Override
-    @Transactional
     public Mono<Recipe> findById(String id) {
         return recipeRepository.findById(id);
     }
 
     @Override
-    @Transactional
     public Mono<RecipeCommand> findCommandById(String commandId) {
         return recipeRepository.findById(commandId)
                 .map(recipe -> {
@@ -62,7 +59,6 @@ public class RecipeServiceImpl implements RecipeService{
     }
 
     @Override
-    @Transactional
     public Mono<RecipeCommand> saveRecipeCommand(RecipeCommand command) {
 
         if(command.getId().isEmpty()) {

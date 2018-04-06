@@ -10,7 +10,7 @@ import java.util.UUID;
 @Setter
 public class Ingredient {
 
-    private String id = UUID.randomUUID().toString();
+    private String id;
     private String description;
     private BigDecimal amount;
 
@@ -20,8 +20,10 @@ public class Ingredient {
     }
 
     public Ingredient(String description, BigDecimal amount, UnitOfMeasure uom) {
+        this.id = UUID.randomUUID().toString();
         this.description = description;
         this.amount = amount;
         this.uom = uom;
     }
+
 }

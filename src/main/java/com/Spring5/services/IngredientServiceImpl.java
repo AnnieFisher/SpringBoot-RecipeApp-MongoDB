@@ -9,7 +9,6 @@ import com.Spring5.repositories.reactive.RecipeReactiveRepository;
 import com.Spring5.repositories.reactive.UnitOfMeasureReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
@@ -51,7 +50,6 @@ public class IngredientServiceImpl implements IngredientService{
     }
 
     @Override
-    @Transactional
     public Mono<IngredientCommand> saveIngredientCommand(IngredientCommand command) {
         Recipe recipe = recipeReactiveRepository.findById(command.getRecipeId()).block();
 
@@ -62,7 +60,7 @@ public class IngredientServiceImpl implements IngredientService{
             Optional<Ingredient> ingredientOptional = recipe
                     .getIngredients()
                     .stream()
-                    .filter(ingredient -> ingredient.getId().equals(command.getId()))
+                    .filter(ingredient -> ingredient.getId().equalsIgnoreCase(command.getId()))
                     .findFirst();
 
             if(ingredientOptional.isPresent()){
