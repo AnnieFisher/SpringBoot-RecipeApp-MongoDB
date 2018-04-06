@@ -1,13 +1,16 @@
 package com.Spring5.controllers;
 
 import com.Spring5.commands.RecipeCommand;
+import com.Spring5.exceptions.NotFoundException;
 import com.Spring5.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.exceptions.TemplateInputException;
 
 @Slf4j
 @Controller
@@ -68,19 +71,16 @@ public class RecipeController {
         return "redirect:/";
     }
 
-//    @ResponseStatus(HttpStatus.NOT_FOUND)
-//    @ExceptionHandler(NotFoundException.class)
-//    public ModelAndView handleNotFound(Exception e){
-//
-//        log.error("Handling not found exception");
-//        log.error(e.getMessage());
-//
-//        ModelAndView modelAndView = new ModelAndView();
-//
-//        modelAndView.setViewName("404error");
-//        modelAndView.addObject("exception", e);
-//
-//        return modelAndView;
-//    }
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({NotFoundException.class, TemplateInputException.class})
+    public String handleNotFound(Exception e, Model model){
+
+        log.error("Handling not found exception");
+        log.error(e.getMessage());
+
+        model.addAttribute("exception", e);
+
+        return "404error";
+    }
 }
 
